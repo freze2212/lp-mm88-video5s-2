@@ -1,0 +1,5 @@
+/domains.json
+  Cache-Control: no-store
+
+/assets/*
+  Cache-Control: public, max-age=604800

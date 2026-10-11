@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MM88 - Link Độc Quyền Bảo Mật Cao</title>
+  <meta name="description" content="MM88 - Kết nối duy nhất, trải nghiệm đỉnh cao. Link độc quyền bảo mật cao." />
+  <meta name="theme-color" content="#2a0505" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preload" as="image" href="/assets/pc.jpg" media="(min-aspect-ratio: 1/1)" />
+  <link rel="preload" as="image" href="/assets/mb.jpg" media="(max-aspect-ratio: 1/1)" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #1a0303; }
+    body { font-family: "Segoe UI", Roboto, Arial, sans-serif; color: #fff; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+
+    .stage { position: fixed; inset: 0; }
+    .backdrop {
+      position: absolute; inset: -40px;
+      background: center / cover no-repeat url("/assets/pc.jpg");
+      filter: blur(28px) brightness(0.55); transform: scale(1.1);
+    }
+    .video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: contain; background: transparent;
+    }
+    @media (max-aspect-ratio: 1/1) {
+      .backdrop { background-image: url("/assets/mb.jpg"); }
+    }
+
+    .bar {
+      position: absolute; left: 50%; bottom: max(22px, env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 14px;
+      padding: 10px 10px 10px 12px; border-radius: 999px;
+      background: rgba(20, 2, 2, 0.62); border: 1px solid rgba(255, 210, 120, 0.45);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), inset 0 0 18px rgba(255, 190, 80, 0.12);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      white-space: nowrap; z-index: 2;
+    }
+    .ring { position: relative; width: 46px; height: 46px; flex: 0 0 46px; }
+    .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .ring circle { fill: none; stroke-width: 4; }
+    .ring .track { stroke: rgba(255, 255, 255, 0.15); }
+    .ring .progress {
+      stroke: #ffd36b; stroke-linecap: round;
+      stroke-dasharray: 125.66; stroke-dashoffset: 0;
+      animation: ring 5s linear forwards;
+    }
+    .ring span {
+      position: absolute; inset: 0; display: grid; place-items: center;
+      font-size: 19px; font-weight: 800; color: #ffe39a;
+    }
+    @keyframes ring { to { stroke-dashoffset: 125.66; } }
+
+    .text { font-size: 14px; line-height: 1.3; color: #f6e7c8; }
+    .text b { display: block; font-size: 15px; color: #fff; letter-spacing: 0.3px; }
+
+    .go {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 46px; padding: 0 24px; border-radius: 999px;
+      font-size: 15px; font-weight: 900; letter-spacing: 0.6px; color: #4a0b00; text-decoration: none;
+      background: linear-gradient(180deg, #fff1b8 0%, #ffd157 45%, #e9a51d 100%);
+      box-shadow: 0 6px 18px rgba(255, 180, 40, 0.45), inset 0 -2px 0 rgba(120, 50, 0, 0.35);
+      animation: pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes pulse { 50% { transform: scale(1.06); } }
+
+    @media (max-width: 520px) {
+      .bar { gap: 10px; padding: 8px 8px 8px 10px; bottom: max(16px, env(safe-area-inset-bottom)); }
+      .ring { width: 40px; height: 40px; flex-basis: 40px; }
+      .ring span { font-size: 17px; }
+      .text { font-size: 12px; }
+      .text b { font-size: 13px; }
+      .go { height: 40px; padding: 0 18px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage" id="stage">
+    <div class="backdrop" aria-hidden="true"></div>
+    <video class="video" id="video" autoplay muted loop playsinline preload="auto" disablepictureinpicture></video>
+
+    <div class="bar">
+      <div class="ring" aria-hidden="true">
+        <svg viewBox="0 0 46 46"><circle class="track" cx="23" cy="23" r="20" /><circle class="progress" cx="23" cy="23" r="20" /></svg>
+        <span id="count">5</span>
+      </div>
+      <div class="text"><b>Đang chuyển đến MM88</b>Tự động sau <span id="count-text">5</span> giây</div>
+      <a class="go" id="go" href="https://7md4i.mm88k.com/register.html" rel="noopener">VÀO NGAY</a>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var DEFAULT_URL = "https://7md4i.mm88k.com/register.html";
+      var SECONDS = 5;
+      var targetUrl = DEFAULT_URL;
+      var linkReady = false;
+      var leaving = false;
+
+      var video = document.getElementById("video");
+      var portrait = window.matchMedia("(max-aspect-ratio: 1/1)").matches;
+      var name = portrait ? "mb" : "pc";
+      video.poster = "/assets/" + name + ".jpg";
+      video.src = "/assets/" + name + ".mp4";
+      var play = video.play();
+      if (play && play.catch) play.catch(function () {});
+
+      function setTarget(url) {
+        if (url) targetUrl = url;
+        document.getElementById("go").href = targetUrl;
+      }
+
+      function go() {
+        if (leaving) return;
+        leaving = true;
+        window.location.replace(targetUrl);
+      }
+
+      var host = (window.location.hostname || "").replace(/^www\./i, "").toLowerCase();
+      var params = new URLSearchParams(window.location.search);
+      if (params.get("target")) { setTarget(params.get("target")); linkReady = true; }
+      else {
+        fetch("/domains.json", { cache: "no-store" })
+          .then(function (r) { return r.json(); })
+          .then(function (dj) {
+            var e = dj[host] || dj["www." + host];
+            setTarget(e && (typeof e === "string" ? e : e.main_url || e.target_url));
+          })
+          .catch(function () {})
+          .then(function () { linkReady = true; });
+      }
+
+      var left = SECONDS;
+      var timer = setInterval(function () {
+        left -= 1;
+        var shown = Math.max(left, 0);
+        document.getElementById("count").textContent = shown;
+        document.getElementById("count-text").textContent = shown;
+        if (left <= 0 && (linkReady || left <= -3)) {
+          clearInterval(timer);
+          go();
+        }
+      }, 1000);
+
+      document.getElementById("stage").addEventListener("click", function (e) {
+        e.preventDefault();
+        go();
+      });
+    })();
+  </script>
+</body>
+</html>
